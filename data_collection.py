@@ -94,6 +94,8 @@ if __name__ == "__main__":
     file_p = "./ck_wrw_lds_bank_free.log"
     log_f_t = log_file_extraction.log_file(file_p)
     perf_pd_t = perf_data_pd()
+    import cProfile
+    cProfile.run('perf_data_pd()')
     perf_l = perf_pd_t.extract_log_file(log_f_t)
     perf_pd_t.gen_perf_pd()
 
