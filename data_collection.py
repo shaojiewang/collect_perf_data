@@ -86,12 +86,12 @@ class perf_data_pd:
         log_idx = list(range(len(perf_array)))
         ds_read_bank_df = pd.DataFrame(perf_array, columns=data_index, index=log_idx)
 
-        with pd.ExcelWriter('ck_perf_data.xlsx') as writer:  
+        with pd.ExcelWriter('ck_perf_data_wrw_resnet50_bs256_mi200.xlsx') as writer:  
             ds_read_bank_df.to_excel(writer, sheet_name='ck_perf')
 
 
 if __name__ == "__main__":
-    file_p = "./ck_wrw_lds_bank_free.log"
+    file_p = "./ck_wrw_resnet50_mi200_bs256.log"
     log_f_t = log_file_extraction.log_file(file_p)
     perf_pd_t = perf_data_pd()
     import cProfile
