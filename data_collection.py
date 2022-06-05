@@ -2,6 +2,7 @@ import pandas as pd
 import perf_data
 import log_file_extraction
 import re
+import argparse
 
 class perf_data_pd:
     def __init__(self) -> None:
@@ -75,7 +76,7 @@ class perf_data_pd:
 
         return perf_list
 
-    def gen_perf_pd(self):
+    def gen_perf_pd(self, log_file):
         perf_list = self.perf_list
         perf_array = []
         data_index = ['n', 'hi', 'wi', 'k', 'c', 'y', 'x', 'ho', 'wo', 'time', 'tflops', 'bandwidth', 'kernel']
@@ -86,18 +87,26 @@ class perf_data_pd:
         log_idx = list(range(len(perf_array)))
         ds_read_bank_df = pd.DataFrame(perf_array, columns=data_index, index=log_idx)
 
-        with pd.ExcelWriter('ck_perf_data_wrw_resnet50_bs256_mi200.xlsx') as writer:  
+        file_name = log_file.file_path
+        xlsx_name = file_name.split('.')[0:-1] + '.xlsx'
+
+        with pd.ExcelWriter(xlsx_name) as writer:  
             ds_read_bank_df.to_excel(writer, sheet_name='ck_perf')
 
 
 if __name__ == "__main__":
-    file_p = "./ck_wrw_resnet50_mi200_bs256.log"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("log_file", help="your log file")
+
+    args = parser.parse_args()
+
+    file_p = args.log_file
     log_f_t = log_file_extraction.log_file(file_p)
     perf_pd_t = perf_data_pd()
-    import cProfile
-    cProfile.run('perf_data_pd()')
+    #import cProfile
+    #cProfile.run('perf_data_pd()')
     perf_l = perf_pd_t.extract_log_file(log_f_t)
-    perf_pd_t.gen_perf_pd()
+    perf_pd_t.gen_perf_pd(log_f_t)
 
     #print(f"ms={perf_l[0].perf_t.elapsed_time}, tflops={perf_l[0].perf_t.tflops}, bw={perf_l[0].perf_t.band_width}")
     
