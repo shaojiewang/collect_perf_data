@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # generated files
-#*.xlsx
+*.xlsx
